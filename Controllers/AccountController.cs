@@ -1,6 +1,5 @@
-﻿namespace PicturePilot.Controllers
+﻿namespace PicturePilot.Controllers;
+
+public class AccountController
 {
-    public class AccountController
-    {
-    }
 }

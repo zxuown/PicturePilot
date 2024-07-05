@@ -1,32 +1,38 @@
-﻿using PicturePilot.Data.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using PicturePilot.Data.Entities;
 using PicturePilot.Data.Interfaces;
 
 namespace PicturePilot.Data.Repositories;
 
-public class BaseRepository<T> : IRepository<T> where T : BaseEntity
+public class BaseRepository<T>(PicturesDbContext context) : IRepository<T> where T : BaseEntity
 {
-    public Task AddAsync()
+    private readonly PicturesDbContext _context = context;
+
+    private readonly DbSet<T> _entities = context.Set<T>();
+
+    public async Task AddAsync(T entity)
     {
-        throw new NotImplementedException();
+        await _entities.AddAsync(entity);
     }
 
-    public Task DeleteAsync()
+    public async Task DeleteAsync(int id)
     {
-        throw new NotImplementedException();
+        var item = await GetByIdAsync(id);
+        _entities.Remove(item);
     }
 
-    public Task<IEnumerable<T>> GetAllAsync()
+    public async Task<IEnumerable<T>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return _entities.AsNoTracking().ToList();
     }
 
-    public Task<T> GetByIdAsync(int id)
+    public async Task<T> GetByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        return await _entities.FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public Task UpdateAsync()
+    public async Task UpdateAsync(T entity)
     {
-        throw new NotImplementedException();
+        _entities.Update(entity);
     }
 }

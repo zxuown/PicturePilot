@@ -19,12 +19,92 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <link href="/path/to/your/custom/styles.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #343a40;
+            color: white;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding-top: 20px;
+        }
+
+            .sidebar a {
+                color: white;
+                display: block;
+                padding: 10px;
+                text-decoration: none;
+                transition: background-color 0.3s;
+            }
+
+                .sidebar a:hover {
+                    background-color: #495057;
+                }
+
+            .sidebar .nav-item .fa {
+                margin-right: 10px;
+            }
+
+        #content-wrapper {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        .topbar {
+            background-color: #4e73df;
+            color: white;
+        }
+
+            .topbar .nav-link {
+                color: white;
+            }
+
+        .card {
+            margin-bottom: 20px;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+    </style>
 </head>
 <body id="page-top">
+    <div class="sidebar">
+        <div class="sidebar-header text-center">
+            <h4>Admin Panel</h4>
+        </div>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="/Admin"><i class="fas fa-home"></i> Main</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Admin/Reports"><i class="fas fa-chart-line"></i> Reports</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Admin/BlackListUsers"><i class="fas fa-user-slash"></i> Black-list users</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Admin/BlackListImages"><i class="fas fa-image"></i> Black-list images</a>
+            </li>
+        </ul>
+    </div>
+
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
-            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
+            <nav class="navbar navbar-expand navbar-light topbar mb-4 static-top shadow">
+                <a class="navbar-brand" href="#"><i class="fas fa-camera-retro"></i> Picture Pilot</a>
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                     <i class="fa fa-bars"></i>
                 </button>
@@ -52,31 +132,16 @@
                         </div>
                     </li>
                 </ul>
-
             </nav>
         </div>
-        <div style="display: flex">
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link" href="/Admin">Main</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/Admin/Reports">Reports</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/Admin/BlackListUsers">Black-list users</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/Admin/BlackListImages">Black-list images</a>
-                </li>
-            </ul>
-            <div class="d-flex justify-content-center w-100 row">
-                @RenderBody()
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-body">
+                    @RenderBody()
+                </div>
             </div>
         </div>
-
-
-        <footer class="sticky-footer bg-white">
+        <footer class="sticky-footer">
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
                     <span>Copyright © Picture Pilot 2024</span>
@@ -91,6 +156,5 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script src="/path/to/your/custom/scripts.js"></script>
-    </script>
 </body>
 </html>

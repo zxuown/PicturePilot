@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PicturePilot.Data;
 
@@ -10,9 +11,11 @@ using PicturePilot.Data;
 namespace PicturePilot.Migrations
 {
     [DbContext(typeof(PicturesDbContext))]
-    partial class PicturesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240708141438_ReportTarget")]
+    partial class ReportTarget
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.6");

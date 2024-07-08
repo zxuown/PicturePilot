@@ -14,4 +14,6 @@ public class PicturesDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     public virtual DbSet<Tag> Tags { get; set; } = null!;
 
     public virtual DbSet<User> Users { get; set; } = null!;
+
+    public virtual DbSet<Report> Reports { get; set; } = null!;
 }

@@ -1,5 +1,138 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Navigation Menu</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link href="/path/to/your/custom/styles.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f2f5;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #007bff; /* Brighter blue */
+            color: white;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding-top: 20px;
+        }
+
+            .sidebar a {
+                color: white;
+                display: block;
+                padding: 10px;
+                text-decoration: none;
+                transition: background-color 0.3s;
+            }
+
+                .sidebar a:hover {
+                    background-color: #0056b3; /* Darker blue on hover */
+                }
+
+        #content-wrapper {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        .topbar {
+            background-color: #28a745; /* Brighter green */
+            color: white;
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: calc(100% - 250px); /* Adjust width */
+            z-index: 1000; /* Ensure it's above other content */
+        }
+
+            .topbar .nav-link {
+                color: white;
+            }
+
+        footer {
+            background-color: #007bff; /* Same as sidebar */
+            color: white;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body id="page-top">
+    <div class="sidebar">
+        <div class="sidebar-header text-center">
+            <h4>Navigation Menu</h4>
+        </div>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="/Main"><i class="fas fa-home"></i> Main</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Profile"><i class="fas fa-user"></i> Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Favorites"><i class="fas fa-heart"></i> Favorites</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/History"><i class="fas fa-history"></i> History</a>
+            </li>
+        </ul>
+    </div>
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <nav class="navbar navbar-expand navbar-light topbar mb-4 static-top shadow">
+                <!-- Placeholder for dynamic login/logout -->
+                <ul class="navbar-nav ml-auto">
+                    <!-- Dynamically generated login/register or logout/username links -->
+                    <!-- This part should be server-side or JavaScript-rendered based on user authentication status -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Register">Register</a>
+                    </li>
+                    <!-- Example for logged in user -->
+                    <!--
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Logout">Logout</a>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link">Username</span>
+                    </li>
+                    -->
+                </ul>
+            </nav>
+        </div>
+        <div class="container-fluid">
+            <!-- Content goes here -->
+            <div class="card">
+                <div class="card-body">
+                    Your content here.
+                </div>
+            </div>
+        </div>
+        <footer class="sticky-footer">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright © Your Website 2024</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="/path/to/your/custom/scripts.js"></script>
+</body>
+</html>

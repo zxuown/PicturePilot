@@ -362,7 +362,8 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
+*PicturesDbContext.db-shm
+*PicturesDbContext.db-wal
 *PicturesDbContext.db
-
 *appsettings.json
 *appsettings.Development.json

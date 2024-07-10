@@ -6,24 +6,26 @@ namespace PicturePilot.Data.Repositories;
 
 public class BaseRepository<T>(PicturesDbContext context) : IRepository<T> where T : BaseEntity
 {
-    private readonly PicturesDbContext _context = context;
+    protected readonly PicturesDbContext _context = context;
 
-    private readonly DbSet<T> _entities = context.Set<T>();
+    protected readonly DbSet<T> _entities = context.Set<T>();
 
     public async Task AddAsync(T entity)
     {
         await _entities.AddAsync(entity);
+        await _context.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(int id)
     {
         var item = await GetByIdAsync(id);
         _entities.Remove(item);
+        await _context.SaveChangesAsync();
     }
 
     public async Task<IEnumerable<T>> GetAllAsync()
     {
-        return _entities.AsNoTracking().ToList();
+        return await _entities.AsNoTracking().ToListAsync();
     }
 
     public async Task<T> GetByIdAsync(int id)
@@ -34,5 +36,6 @@ public class BaseRepository<T>(PicturesDbContext context) : IRepository<T> where
     public async Task UpdateAsync(T entity)
     {
         _entities.Update(entity);
+        _context.SaveChanges();
     }
 }

@@ -126,7 +126,7 @@ public class AccountController(UserManager<User> userManager, SignInManager<User
 
     [HttpPost]
     [AllowAnonymous]
-    public async Task<IActionResult> Login([FromForm] LoginModel model)
+    public async Task<IActionResult> Login([FromBody] LoginModel model)
     {
         model.LoginOrEmail = model.LoginOrEmail?.Trim();
         if (string.IsNullOrEmpty(model.LoginOrEmail))

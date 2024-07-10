@@ -1,64 +1,57 @@
-﻿@*
+﻿@using PicturePilot.Data.Entities;
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
     Layout = "_AdminLayout";
     ViewData["Title"] = "Black list images";
 }
+@model IEnumerable<Image>
+
 <div>
-    <table width="100%" id="dtExample" class="display " cellspacing="0">
+    <table width="100%" id="dtExample" class="display" cellspacing="0">
         <thead>
             <tr>
-                <th>S.No</th>
-                <th>Name</th>
-                <th>Age</th>
-                <th>City</th>
-                <th>State</th>
+                <th>Id</th>
+                <th>Url</th>
+                <th>User</th>
+                <th>IsBlocked</th>
+                <th>Tags</th>
+                <th>Action</th>
             </tr>
         </thead>
+        <tbody>
+            @foreach (var image in Model)
+            {
+                <tr>
+                    <td>@image.Id</td>
+                    <td><img src="@image.Url" alt="Image" width="100" /></td>
+                    <td>@image.user.UserName</td>
+                    <td>@image.IsBLocked</td>
+                    <td>@string.Join(", ", image.Tags.Select(tag => tag.Title))</td>
+                    <td>
+                        <form action="/Admin/Image/Unblock/@image.Id" method="post">
+                            <button type="submit" class="btn btn-primary">Unblock</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
     </table>
 </div>
+
 <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
 <script>
     $(document).ready(function () {
-        fnLoadDataTableInstance()
-    })
-    function fnLoadDataTableInstance() {
-        var dataSource = [
-            { name: 'Gowtham', age: 28, city: 'Coimbatore', state: 'Tamil Nadu' },
-            { name: 'Sudhan', age: 38, city: 'Ooty', state: 'Tamil Nadu' },
-            { name: 'Vignesh', age: 34, city: 'Erode', state: 'Tamil Nadu' },
-            { name: 'CSK', age: 34, city: 'Coimbatore', state: 'Tamil Nadu' },
-            { name: 'Arvind', age: 28, city: 'Coimbatore', state: 'Tamil Nadu' },
-            { name: 'Rahul', age: 38, city: 'Ooty', state: 'Tamil Nadu' },
-            { name: 'Raji', age: 34, city: 'Erode', state: 'Tamil Nadu' },
-            { name: 'Ananthi', age: 34, city: 'Coimbatore', state: 'Tamil Nadu' },
-        ]
-
         $('#dtExample').DataTable({
             dom: 'Bfrtip',
-            data: dataSource,
-            columns: [
-                {
-                    render: function (data, type, row, meta) {
-                        return meta.row + meta.settings._iDisplayStart + 1;
-                    }
-                },
-                { data: 'name' },
-                { data: 'age' },
-                { data: 'city' },
-                { data: 'state' }
-            ],
-
             "paging": true,
             "info": true,
             "language": {
                 "emptyTable": "No data available"
-            },
-            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-                $("td:first", nRow).html(iDisplayIndex + 1);
-                return nRow;
-            },
-        })
-    }
+            }
+        });
+    });
 </script>

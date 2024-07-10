@@ -11,4 +11,6 @@ public class User : IdentityUser<int>
     public string? AvatarUrl { get; set; }
 
     public DateTime CreatedAt { get; set; }
+
+    public bool IsBLocked { get; set; }
 }

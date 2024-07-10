@@ -1,20 +1,36 @@
-﻿@*
+﻿@using PicturePilot.Data.Entities;
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
     Layout = "_AdminLayout";
     ViewData["Title"] = "Reports";
 }
+@model IEnumerable<Report>
 <div class="d-flex justify-content-center w-100 row">
-    <div class="card col-md-4 mb-3 mr-3" style="width: 18rem;">
-        <div class="card-body">
-            <p class="card-text">
-                Report type: Image<br/>
-                Some quick example text to build on the card title and make up the bulk of the card's content.
-                <br/>User: Petya
-            </p>
-            <a href="#" class="btn btn-primary">Innocent</a>
-            <a href="#" class="btn btn-danger">BAN!</a>
+    @foreach (var item in Model)
+    {
+        <div class="card col-md-4 mb-3 mr-3" style="width: 18rem;">
+            <div class="card-body">
+                <p class="card-text">
+                    @if ((int)@item.ReportType == 0)
+                    {
+                        <div>Report type: User</div>
+                    }
+                    else
+                    {
+                        <div>Report type: Image</div>
+                    }
+                    @item.Message
+                    <br />Sender:  @item.Sender.Email
+                </p>
+                <form method="post" action="/Admin/Reports/Innocent/@item.Id">
+                    <button type="submit" class="btn btn-primary">Innocent</button>
+                </form>
+                <form method="post" action="/Admin/Reports/Block/@item.Id">
+                    <button type="submit" class="btn btn-danger">Block</button>
+                </form>
+            </div>
         </div>
-    </div>
+    }
 </div>

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PicturePilot.Data;
 using PicturePilot.Data.Entities;
+using PicturePilot.Data.Repositories;
 using PicturePilot.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,9 @@ builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
     .AddEntityFrameworkStores<PicturesDbContext>()
     .AddDefaultTokenProviders();
 builder.Services.AddScoped<ImageService>();
+builder.Services.AddScoped<ReportRepository>();
+builder.Services.AddScoped<ImageRepository>();
+builder.Services.AddScoped<UserRepository>();
 builder.Services.AddAuthentication();
 builder.Services.AddSession(options =>
 {

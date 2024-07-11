@@ -4,15 +4,18 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PicturePilot.Business.Models;
 using PicturePilot.Data.Entities;
-using PicturePilot.Services;
 using System.Data;
+using PicturePilot.Business.Services;
+using PicturePilot.Data;
 
 namespace PicturePilot.Controllers;
 
-public class AccountController(UserManager<User> userManager, SignInManager<User> signInManager, ImageService imageService, IConfiguration configuration) : Controller
+public class AccountController(UserManager<User> userManager, SignInManager<User> signInManager, ImageService imageService, IConfiguration configuration, RoleManager<IdentityRole<int>> roleManager, PicturesDbContext context) : Controller
 {
     private readonly UserManager<User> _userManager = userManager;
     private readonly SignInManager<User> _signInManager = signInManager;
+    private readonly RoleManager<IdentityRole<int>> _roleManager = roleManager;
+    private readonly PicturesDbContext _context = context;
     private readonly IConfiguration _configuration = configuration;
     private readonly ImageService _imageService = imageService;
     public IActionResult Login()
@@ -21,7 +24,7 @@ public class AccountController(UserManager<User> userManager, SignInManager<User
     }
 
     [HttpGet]
-    public IActionResult Register()
+    public async Task<IActionResult> Register()
     {
         return View();
     }
@@ -128,6 +131,7 @@ public class AccountController(UserManager<User> userManager, SignInManager<User
     [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody] LoginModel model)
     {
+
         model.LoginOrEmail = model.LoginOrEmail?.Trim();
         if (string.IsNullOrEmpty(model.LoginOrEmail))
         {

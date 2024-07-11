@@ -26,7 +26,7 @@
                 <tr>
                     <td>@image.Id</td>
                     <td><img src="@image.Url" alt="Image" width="100" /></td>
-                    <td>@image.user.UserName</td>
+                    <td>@image.User.UserName</td>
                     <td>@image.IsBLocked</td>
                     <td>@string.Join(", ", image.Tags.Select(tag => tag.Title))</td>
                     <td>

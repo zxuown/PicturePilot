@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PicturePilot.Data.Entities;
-using System.Collections.Immutable;
 
 namespace PicturePilot.Data.Repositories;
 
@@ -9,12 +7,22 @@ public class ImageRepository(PicturesDbContext context) : BaseRepository<Image>(
 {
     public async new Task<IEnumerable<Image>> GetAllAsync()
     {
-        return await _entities.Include(x => x.user).Include(x => x.Tags).ToListAsync();
+        return await _entities.Include(x => x.User).Include(x => x.Tags).ToListAsync();
     }
 
     public async Task<IEnumerable<Image>> GetAllBlockedAsync()
     {
         var allImages = await GetAllAsync();
         return allImages.Where(x => x.IsBLocked).ToList();
+    }
+
+    public async Task<IEnumerable<Image>> GetAllByUserIdAsync(int userId)
+    {
+        return await _entities.Where(x => x.User.Id == userId).ToListAsync();
+    }
+
+    public async Task<int> GetFavoritesCountAsync(int imageId)
+    {
+        return await _context.Favorites.Where(x => x.ImageId == imageId).CountAsync();
     }
 }

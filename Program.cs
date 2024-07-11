@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PicturePilot.Data;
 using PicturePilot.Data.Entities;
 using PicturePilot.Data.Repositories;
-using PicturePilot.Services;
+using PicturePilot.Business.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<PicturesDbContext>(options =>

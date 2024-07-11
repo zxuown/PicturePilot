@@ -1,0 +1,30 @@
+﻿@model IEnumerable<UserImageHistory>
+@{
+    ViewData["Title"] = "History";
+   
+
+}
+<h2>History</h2>
+
+<div>
+    <form asp-action="ClearHistory" method="post">
+        <select name="timeframe">
+            <option value="1day">1 Day</option>
+            <option value="1week">1 Week</option>
+            <option value="1month">1 Month</option>
+            <option value="1year">1 Year</option>
+            <option value="all">All</option>
+        </select>
+        <button type="submit">Clear History</button>
+    </form>
+</div>
+
+<div>
+    @foreach (var item in Model)
+    {
+        <div>
+            <img src="@item.Image.Url" alt="Reviewed Image">
+            <p>Reviewed on: @item.ViewedAt.ToString("g")</p>
+        </div>
+    }
+</div>

@@ -1,0 +1,54 @@
+﻿@model PicturePilot.Business.Models.UserProfileViewModel
+@{
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <style>
+        .profile img.avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+        .comment {
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .image img {
+            width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+    </style>
+}
+
+<div class="container mt-4">
+    <div class="profile text-center">
+        <img src="@Model.User.AvatarUrl" alt="Avatar" class="avatar img-thumbnail">
+        <h2>@Model.User.Name</h2>
+    </div>
+    <div class="comments mt-4">
+        <h3>Last 5 Comments</h3>
+        @foreach (var comment in Model.LastComments)
+        {
+            <div class="comment">
+                <p>@comment.Text</p>
+            </div>
+        }
+    </div>
+    <div class="images mt-4">
+        <h3>Images</h3>
+        @foreach (var image in Model.Images)
+        {
+            <div class="image">
+                <img src="@image.Url" alt="@image.Title" class="img-fluid">
+            </div>
+        }
+    </div>
+</div>

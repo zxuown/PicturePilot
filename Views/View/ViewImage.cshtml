@@ -18,6 +18,15 @@
                         <button class="btn btn-outline-secondary" id="shareButton"><i class="fas fa-share"></i></button>
                         <a href="/Reports/Create/Image/@Model.Image.Id" class="btn btn-outline-danger"><i class="fas fa-flag"></i></a>
                     </div>
+                    <div class="tags mt-3">
+                        <h6>Tags</h6>
+                        <div>
+                            @foreach (var tag in Model.Image.Tags)
+                            {
+                                <span class="badge badge-secondary">@tag.Title</span>
+                            }
+                        </div>
+                    </div>
                     <div class="user-info mt-3">
                         <img src="@Model.Image.User.AvatarUrl" class="rounded-circle" width="30" height="30" alt="@Model.Image.User.Name">
                         <span>@Model.Image.User.Name <a href="/Reports/Create/User/@Model.Image.User.Id" class="btn btn-outline-danger"><i class="fas fa-flag"></i></a></span>

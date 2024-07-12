@@ -23,7 +23,7 @@ public class HomeController(ImageRepository imageRepository) : Controller
     [HttpGet("/Home/{query?}")]
     public async Task<IActionResult> Home(string? query)
     {
-        if (string.IsNullOrEmpty(query))
+        if (!string.IsNullOrEmpty(query))
         {
             var images = await _imageRepository.SearchAsync(query);
             return View(images);

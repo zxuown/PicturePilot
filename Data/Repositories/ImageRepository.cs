@@ -12,7 +12,12 @@ public class ImageRepository(PicturesDbContext context) : BaseRepository<Image>(
 
     public async new Task<Image> GetByIdAsync(int id)
     {
-        return await _entities.Include(x => x.User).Include(x => x.Tags).Include(x=> x.Favorites).Include(x=> x.Comments).FirstOrDefaultAsync(x => x.Id == id);
+        return await _entities.Include(x => x.User)
+            .Include(x => x.Tags)
+            .Include(x => x.Favorites)
+            .Include(x => x.Comments)
+            .ThenInclude(x => x.User)
+            .FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<IEnumerable<Image>> GetAllBlockedAsync()

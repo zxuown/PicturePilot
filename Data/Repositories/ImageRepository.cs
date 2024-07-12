@@ -30,4 +30,10 @@ public class ImageRepository(PicturesDbContext context) : BaseRepository<Image>(
     {
         return await _context.Favorites.Where(x => x.ImageId == imageId).CountAsync();
     }
+
+    public async Task CreateCommentAsync(Comment comment)
+    {
+        await _context.Comments.AddAsync(comment);
+        await _context.SaveChangesAsync();
+    }
 }

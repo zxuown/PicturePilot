@@ -15,7 +15,7 @@
                     <div class="actions">
                         <button id="favoriteButton" class="btn btn-outline-@(Model.IsFavorite ? "primary" : "secondary")" data-image-id="@Model.Image.Id"><i class="fas fa-thumbs-up"></i></button>
                         <span id="favoriteCount">@Model.Image.Favorites.Count</span>
-                        <button class="btn btn-outline-secondary"><i class="fas fa-share"></i></button>
+                        <button class="btn btn-outline-secondary" id="shareButton"><i class="fas fa-share"></i></button>
                         <button class="btn btn-outline-danger"><i class="fas fa-flag"></i></button>
                     </div>
                     <div class="user-info mt-3">
@@ -27,12 +27,18 @@
                         <h6>Comments</h6>
                         @foreach (var comment in Model.Image.Comments)
                         {
-                            <div class="comment mb-2">
-                                <strong>@comment.User.Name</strong>
-                                <p>@comment.Text</p>
+                            <div class="row ml-2 mt-3">
+                                <div class="comment ml-3 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;">
+                                    <img src="@comment.User.AvatarUrl" style="width:30px; height:30px;" class="rounded-circle" alt="@Model.Image.User.Name">
+                                </div>
+                                <div class="comment mb-2 ml-3">
+                                    <strong>@comment.User.Name</strong>
+                                    <p>@comment.Text</p>
+                                </div>
                             </div>
                         }
                     </div>
+                    <button id="commentButton" class="btn btn-outline-info"><i class="fas fa-comment"></i> Comment</button>
                 </div>
             </div>
         </div>
@@ -41,30 +47,72 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const favoriteButton = document.getElementById('favoriteButton');
-        favoriteButton.addEventListener('click', function () {
-            const imageId = this.getAttribute('data-image-id');
+        const shareButton = document.getElementById('shareButton');
+        const commentButton = document.getElementById('commentButton');
+        const imageId = '@Model.Image.Id'; // Get the image ID from the model
+        const imageLink = `https://localhost:7184/View/Image/${imageId}`;
+
+        favoriteButton.addEventListener('click', favoriteHandler);
+        shareButton.addEventListener('click', shareHandler);
+        commentButton.addEventListener('click', commentHandler);
+
+        function favoriteHandler() {
             fetch(`/Images/${imageId}/Favorite`, { method: 'GET' })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(data => {
-                    console.log(data)
                     if (data) {
-                        favoriteButton.classList.remove('btn-outline-secondary');
-                        favoriteButton.classList.add('btn-outline-primary');
+                        favoriteButton.classList.toggle('btn-outline-primary', true);
+                        favoriteButton.classList.toggle('btn-outline-secondary', false);
                         favoriteCount.textContent = parseInt(favoriteCount.textContent) + 1;
                     } else {
-                        favoriteButton.classList.remove('btn-outline-primary');
-                        favoriteButton.classList.add('btn-outline-secondary');
+                        favoriteButton.classList.toggle('btn-outline-primary', false);
+                        favoriteButton.classList.toggle('btn-outline-secondary', true);
                         favoriteCount.textContent = parseInt(favoriteCount.textContent) - 1;
                     }
                 })
-                .catch(error => {
-                    console.error('Error toggling favorite status:', error);
-                });
-        });
+                .catch(error => console.error('Error toggling favorite status:', error));
+        }
+
+        function shareHandler() {
+            navigator.clipboard.writeText(imageLink)
+                .then(() => Swal.fire('Success!', 'Link copied to clipboard!', 'success'))
+                .catch(err => console.error('Could not copy link: ', err));
+        }
+
+        function commentHandler() {
+            Swal.fire({
+                title: 'Enter your comment',
+                input: 'textarea',
+                showCancelButton: true,
+                confirmButtonText: 'Post Comment',
+                showLoaderOnConfirm: true,
+                preConfirm: (commentText) => {
+                    return fetch(`/Images/${imageId}/Comment`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(commentText)
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(response.statusText)
+                            }
+                            return response.json();
+                        })
+                        .catch(error => {
+                            Swal.showValidationMessage(`Request failed: ${error}`);
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire('Posted!', 'Your comment has been posted.', 'success').then(() => {
+                        window.location.reload(); // Reload the page to show the new comment
+                    });
+                }
+            });
+        }
     });
 </script>

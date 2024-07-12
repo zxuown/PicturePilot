@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PicturePilot.Data.Entities;
+using PicturePilot.Data.Enums;
 using PicturePilot.Data.Repositories;
 
 namespace PicturePilot.Controllers;
@@ -15,28 +16,21 @@ public class ReportsController(ReportRepository reportRepository, UserManager<Us
 
     private readonly ImageRepository _imageRepository = imageRepository;
 
-    [HttpGet("/Reports/Create/{targetId}")]
-    public async Task<IActionResult> Create(int targetId)
+    [HttpGet("/Reports/Create/{type}/{targetId}")]
+    public async Task<IActionResult> Create(ReportType type, int targetId)
     {
         return View(new Report
         {
             TargetId = targetId,
+            ReportType = (int)type == 0 ? ReportType.User : ReportType.Image
         });
     }
 
-    [HttpPost("/Reports/Create/{targetId}")]
-    public async Task<IActionResult> Create([FromForm] Report report, int targetId)
+    [HttpPost("/Reports/Create/{type}/{targetId}")]
+    public async Task<IActionResult> Create([FromForm] Report report, ReportType type, int targetId)
     {
-        Image image = await _imageRepository.GetByIdAsync(targetId);
-        if ((int)report.ReportType == 0)
-        {
-            User user = await _userManager.FindByIdAsync(image.UserId.ToString());
-            report.TargetId = user.Id;
-        }
-        else
-        {
-            report.TargetId = targetId;
-        }
+        report.ReportType = (int)type == 0 ? ReportType.User : ReportType.Image;
+        report.TargetId = targetId;
         report.Sender = await _userManager.GetUserAsync(User);
         await _reportRepository.AddAsync(report);
         return Ok();

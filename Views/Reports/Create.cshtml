@@ -7,7 +7,7 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<form id="reportForm" action="/Reports/Create/@Model.TargetId" method="post" class="form-horizontal">
+<form id="reportForm" action="/Reports/Create/@Model.ReportType/@Model.TargetId" method="post" class="form-horizontal">
     <div class="form-group">
         <label asp-for="Message" class="control-label col-md-2">Message</label>
         <div class="col-md-10">
@@ -19,9 +19,9 @@
     <div class="form-group">
         <label asp-for="ReportType" class="control-label col-md-2">Report Type</label>
         <div class="col-md-10">
-            <select asp-for="ReportType" name="ReportType" class="form-control">
-                <option value="0">User</option>
-                <option value="1">Image</option>
+            <select asp-for="ReportType" name="ReportType" class="form-control" disabled>
+                <option value="0" @(Model.ReportType == PicturePilot.Data.Enums.ReportType.User ? "selected" : "")>User</option>
+                <option value="1" @(Model.ReportType == PicturePilot.Data.Enums.ReportType.Image ? "selected" : "")>Image</option>
             </select>
             <span asp-validation-for="ReportType" class="text-danger"></span>
         </div>

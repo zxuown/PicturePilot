@@ -30,35 +30,38 @@
         <input name="UploadedAvatar" type="file" class="form-control-file" />
     </div>
     <button type="submit" class="btn btn-primary">Register</button>
+
+    <p class="mb-0">Have an account? <a href="@Url.Action("Login")" class="btn btn-link"><i>Sign up</i></a></p>
 </form>
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        $(document).ready(function () {
-            $('#registerForm').submit(function (e) {
-                e.preventDefault();
-                var formData = new FormData(this);
-                $.ajax({
-                    url: '/Account/Register',
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (data) {
-                        if (data.result === "Redirect") {
-                            window.location.href = '/Home/Index';
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Something went wrong! ' + xhr.responseText.error,
-                        });
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('registerForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            fetch('/Account/Register', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
                     }
+                    return response.json();
+                })
+                .then(data => {
+                        window.location.href = '/Home';
+                })
+                .catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong! ' + error.message,
+                    });
                 });
-            });
         });
-    </script>
+    });
+</script>

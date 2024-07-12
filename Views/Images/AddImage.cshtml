@@ -1,7 +1,10 @@
-﻿@using PicturePilot.Business.Models
-@model ImageUploadViewModel
+﻿@model PicturePilot.Business.Models.ImageUploadViewModel;
 
-<form action="AddImage" method="post" enctype="multipart/form-data">
+@{
+    ViewData["Title"] = "Add Image";
+    Layout = "_Layout";
+}
+<form action="/Images/Add/Submit" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label for="Title">Title</label>
         <input type="text" class="form-control" id="Title" name="Title" required>

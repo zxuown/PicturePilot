@@ -39,7 +39,7 @@ public class ImageService(IConfiguration configuration, ComputerVisionClient com
 
     public async Task<ImageAnalysis> AnalyzeImageAsync(string imageUrl)
     {
-        _computerVisionClient = Authenticate(_configuration.GetValue<string>("Azure:CognitiveServices:Key"), _configuration.GetValue<string>("Azure:CognitiveServices:Endpoint"));
+        _computerVisionClient = Authenticate(_configuration.GetValue<string>("Azure:ComputerVision:SubscriptionKey"), _configuration.GetValue<string>("Azure:ComputerVision:Endpoint"));
         var features = new List<VisualFeatureTypes?> { VisualFeatureTypes.Description, VisualFeatureTypes.Adult, VisualFeatureTypes.Faces, VisualFeatureTypes.Categories, VisualFeatureTypes.Tags, VisualFeatureTypes.Objects };
         var analysisResult = await _computerVisionClient.AnalyzeImageAsync(imageUrl, features);
         return analysisResult;

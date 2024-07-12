@@ -1,0 +1,43 @@
+﻿@model IEnumerable<UserImageHistory>
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4">History</h2>
+
+    <div class="mb-3">
+        <form asp-action="ClearHistory" method="post" class="form-inline">
+            <div class="form-group">
+                <select name="timeframe" class="form-control">
+                    <option value="1day">1 Day</option>
+                    <option value="1week">1 Week</option>
+                    <option value="1month">1 Month</option>
+                    <option value="1year">1 Year</option>
+                    <option value="all">All</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-danger ml-2">Clear History</button>
+        </form>
+    </div>
+
+    <div>
+        @foreach (var item in Model)
+        {
+            <div class="card mb-3">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <img src="@item.Image.Url" class="card-img" alt="Reviewed Image">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Reviewed Image</h5>
+                            <p class="card-text">Reviewed on: @item.ViewedAt.ToString("g")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

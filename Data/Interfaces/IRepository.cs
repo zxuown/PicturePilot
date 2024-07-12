@@ -4,7 +4,7 @@ namespace PicturePilot.Data.Interfaces;
 
 public interface IRepository<T> where T : BaseEntity
 {
-    Task AddAsync(T entity);
+    Task<int> AddAsync(T entity);
 
     Task UpdateAsync(T entity);
 

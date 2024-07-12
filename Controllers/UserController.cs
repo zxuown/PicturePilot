@@ -1,14 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PicturePilot.Data.Entities;
 using PicturePilot.Data.Repositories;
 
 namespace PicturePilot.Controllers;
 
-public class UserController : Controller
+[Authorize]
+public class UserController(UserRepository userRepository, UserManager<User> userManager) : Controller
 { 
-    private readonly UserRepository _userRepository;
-    private readonly UserManager<User> _userManager;
+    private readonly UserRepository _userRepository = userRepository;
+    private readonly UserManager<User> _userManager = userManager;
 
     [HttpGet("/history")]
     public async Task<IActionResult> History()

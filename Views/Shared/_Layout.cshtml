@@ -1,43 +1,129 @@
-﻿@model IEnumerable<UserImageHistory>
-
-@{
-    Layout = "_Layout";
-}
-
-<div class="container mt-5">
-    <h2 class="mb-4">History</h2>
-
-    <div class="mb-3">
-        <form asp-action="ClearHistory" method="post" class="form-inline">
-            <div class="form-group">
-                <select name="timeframe" class="form-control">
-                    <option value="1day">1 Day</option>
-                    <option value="1week">1 Week</option>
-                    <option value="1month">1 Month</option>
-                    <option value="1year">1 Year</option>
-                    <option value="all">All</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-danger ml-2">Clear History</button>
-        </form>
-    </div>
-
-    <div>
-        @foreach (var item in Model)
-        {
-            <div class="card mb-3">
-                <div class="row no-gutters">
-                    <div class="col-md-4">
-                        <img src="@item.Image.Url" class="card-img" alt="Reviewed Image">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">Reviewed Image</h5>
-                            <p class="card-text">Reviewed on: @item.ViewedAt.ToString("g")</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Navigation Menu</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link href="/path/to/your/custom/styles.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f2f5;
         }
+
+        .sidebar {
+            width: 250px;
+            background-color: #007bff; /* Brighter blue */
+            color: white;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding-top: 20px;
+        }
+
+            .sidebar a {
+                color: white;
+                display: block;
+                padding: 10px;
+                text-decoration: none;
+                transition: background-color 0.3s;
+            }
+
+                .sidebar a:hover {
+                    background-color: #0056b3; /* Darker blue on hover */
+                }
+
+        #content-wrapper {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        .topbar {
+            background-color: #28a745; /* Brighter green */
+            color: white;
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: calc(100% - 250px); /* Adjust width */
+            z-index: 1000; /* Ensure it's above other content */
+        }
+
+            .topbar .nav-link {
+                color: white;
+            }
+
+        footer {
+            background-color: #007bff; /* Same as sidebar */
+            color: white;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body id="page-top">
+    <div class="sidebar">
+        <div class="sidebar-header text-center">
+            <h4>Navigation Menu</h4>
+        </div>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="/Main"><i class="fas fa-home"></i> Main</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Profile"><i class="fas fa-user"></i> Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Favorites"><i class="fas fa-heart"></i> Favorites</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/History"><i class="fas fa-history"></i> History</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Images/Add"><i class="fas fa-plus"></i> Create</a>
+            </li>
+        </ul>
     </div>
-</div>
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <nav class="navbar navbar-expand navbar-light topbar mb-4 static-top shadow">
+                <ul class="navbar-nav ml-auto">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Logout">Logout</a>
+                        </li>
+                        <li class="nav-item">
+                            <span class="nav-link">@User.Identity.Name</span>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Account/Login">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Account/Register">Register</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+        <div class="container-fluid mt-5">
+                    @RenderBody()
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="/path/to/your/custom/scripts.js"></script>
+</body>
+</html>

@@ -26,13 +26,23 @@ public class UserRepository(UserManager<User> userManager, PicturesDbContext con
 
     public void AddToHistory(int userId, int imageId)
     {
-        var history = new UserImageHistory
+
+        var history = _context.History.FirstOrDefault(x => x.UserId == userId && x.ImageId == imageId);
+        if (history != null)
         {
-            UserId = userId,
-            ImageId = imageId,
-            ViewedAt = DateTime.Now
-        };
-        _context.History.Add(history);
+            history.ViewedAt = DateTime.Now;
+            _context.History.Update(history);
+        }
+        else
+        {
+            history = new UserImageHistory
+            {
+                UserId = userId,
+                ImageId = imageId,
+                ViewedAt = DateTime.Now
+            };
+            _context.History.Add(history);
+        }
         _context.SaveChanges();
     }
 
@@ -46,6 +56,32 @@ public class UserRepository(UserManager<User> userManager, PicturesDbContext con
         var history = await _context.History.Where(x => x.UserId == userId && x.ViewedAt > cutoffDate).ToListAsync();
         _context.History.RemoveRange(history);
         _context.SaveChanges();
+    }
+
+    public bool SwitchFavorite(int userId, int imageId)
+    {
+        var favorite = _context.Favorites.FirstOrDefault(x => x.UserId == userId && x.ImageId == imageId);
+        bool isFavorite = favorite != null;
+        if (favorite != null)
+        {
+            _context.Favorites.Remove(favorite);
+        }
+        else
+        {
+            favorite = new Favorite
+            {
+                UserId = userId,
+                ImageId = imageId
+            };
+            _context.Favorites.Add(favorite);
+        }
+        _context.SaveChanges();
+        return !isFavorite;
+    }
+
+    public bool IsFavorite(int userId, int imageId)
+    {
+        return _context.Favorites.Any(x => x.UserId == userId && x.ImageId == imageId);
     }
 
     public async Task UpdateAsync(User user)

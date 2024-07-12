@@ -10,6 +10,11 @@ public class ImageRepository(PicturesDbContext context) : BaseRepository<Image>(
         return await _entities.Include(x => x.User).Include(x => x.Tags).ToListAsync();
     }
 
+    public async new Task<Image> GetByIdAsync(int id)
+    {
+        return await _entities.Include(x => x.User).Include(x => x.Tags).Include(x=> x.Favorites).Include(x=> x.Comments).FirstOrDefaultAsync(x => x.Id == id);
+    }
+
     public async Task<IEnumerable<Image>> GetAllBlockedAsync()
     {
         var allImages = await GetAllAsync();

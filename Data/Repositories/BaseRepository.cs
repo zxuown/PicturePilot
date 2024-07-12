@@ -10,10 +10,11 @@ public class BaseRepository<T>(PicturesDbContext context) : IRepository<T> where
 
     protected readonly DbSet<T> _entities = context.Set<T>();
 
-    public async Task AddAsync(T entity)
+    public async Task<int> AddAsync(T entity)
     {
         await _entities.AddAsync(entity);
         await _context.SaveChangesAsync();
+        return entity.Id;
     }
 
     public async Task DeleteAsync(int id)

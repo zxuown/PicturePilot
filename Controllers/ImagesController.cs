@@ -8,7 +8,7 @@ using PicturePilot.Data.Repositories;
 
 namespace PicturePilot.Controllers;
 
-public class ImageController(ImageService imageService, ImageRepository imageRepository, UserRepository userRepository, UserManager<User> userManager) : Controller
+public class ImagesController(ImageService imageService, ImageRepository imageRepository, UserRepository userRepository, UserManager<User> userManager) : Controller
 {
     private readonly ImageService _imageService = imageService;
     private readonly ImageRepository _imageRepository = imageRepository;
@@ -16,14 +16,14 @@ public class ImageController(ImageService imageService, ImageRepository imageRep
     private readonly UserManager<User> _userManager = userManager;
 
     [Authorize]
-    [HttpGet("/images/add")]
+    [HttpGet("/Images/Add")]
     public IActionResult AddImage()
     {
-        return View();
+        return View("/Views/Images/AddImage.cshtml");
     }
 
     [Authorize]
-    [HttpPost("/images/add")]
+    [HttpPost("/Images/Add/Submit")]
     public async Task<IActionResult> AddImage(ImageUploadViewModel model)
     {
         if (ModelState.IsValid)
@@ -43,23 +43,17 @@ public class ImageController(ImageService imageService, ImageRepository imageRep
                 UserId = (await _userManager.GetUserAsync(User)).Id,
                 CreatedAt = DateTime.Now,
             };
-            await _imageRepository.AddAsync(image);
-            return RedirectToAction("SuccessPage");
+            var id = await _imageRepository.AddAsync(image);
+            return RedirectToAction($"/View/Image/{id}");
         }
 
         return View(model);
     }
-
-    [HttpGet("/images/{id}")]
-    public async Task<IActionResult> GetImage(int id)
+    [HttpGet("/Images/{id}/Favorite")]
+    public async Task<IActionResult> Favorite(int id)
     {
         var user = await _userManager.GetUserAsync(User);
-        var image = await _imageRepository.GetByIdAsync(id);
-
-        if (user != null)
-        {
-            _userRepository.AddToHistory(user.Id, id);
-        }
-        return View(image);
-    }
+        var result = _userRepository.SwitchFavorite(user.Id, id);
+        return Ok(result);
+    } 
 }

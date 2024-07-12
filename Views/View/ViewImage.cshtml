@@ -1,0 +1,70 @@
+﻿@model PicturePilot.Business.Models.ImageModel
+
+@{
+    ViewData["Title"] = "Image Details";
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <img src="@Model.Image.Url" class="card-img-top" alt="@Model.Image.Title">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.Image.Title</h5>
+                    <div class="actions">
+                        <button id="favoriteButton" class="btn btn-outline-@(Model.IsFavorite ? "primary" : "secondary")" data-image-id="@Model.Image.Id"><i class="fas fa-thumbs-up"></i></button>
+                        <span id="favoriteCount">@Model.Image.Favorites.Count</span>
+                        <button class="btn btn-outline-secondary"><i class="fas fa-share"></i></button>
+                        <button class="btn btn-outline-danger"><i class="fas fa-flag"></i></button>
+                    </div>
+                    <div class="user-info mt-3">
+                        <img src="@Model.Image.User.AvatarUrl" class="rounded-circle" width="30" height="30" alt="@Model.Image.User.Name">
+                        <span>@Model.Image.User.Name</span>
+                        <span class="text-muted">@Model.Image.CreatedAt.ToString("MMMM dd, yyyy")</span>
+                    </div>
+                    <div class="comments mt-3">
+                        <h6>Comments</h6>
+                        @foreach (var comment in Model.Image.Comments)
+                        {
+                            <div class="comment mb-2">
+                                <strong>@comment.User.Name</strong>
+                                <p>@comment.Text</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const favoriteButton = document.getElementById('favoriteButton');
+        favoriteButton.addEventListener('click', function () {
+            const imageId = this.getAttribute('data-image-id');
+            fetch(`/Images/${imageId}/Favorite`, { method: 'GET' })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data)
+                    if (data) {
+                        favoriteButton.classList.remove('btn-outline-secondary');
+                        favoriteButton.classList.add('btn-outline-primary');
+                        favoriteCount.textContent = parseInt(favoriteCount.textContent) + 1;
+                    } else {
+                        favoriteButton.classList.remove('btn-outline-primary');
+                        favoriteButton.classList.add('btn-outline-secondary');
+                        favoriteCount.textContent = parseInt(favoriteCount.textContent) - 1;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error toggling favorite status:', error);
+                });
+        });
+    });
+</script>

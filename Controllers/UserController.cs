@@ -12,7 +12,7 @@ public class UserController(UserRepository userRepository, UserManager<User> use
     private readonly UserRepository _userRepository = userRepository;
     private readonly UserManager<User> _userManager = userManager;
 
-    [HttpGet("/history")]
+    [HttpGet("/History")]
     public async Task<IActionResult> History()
     {
         var userId = _userManager.GetUserId(User);
@@ -20,7 +20,7 @@ public class UserController(UserRepository userRepository, UserManager<User> use
         return View(history);
     }
 
-    [HttpPost("/history/clear")]
+    [HttpPost("/History/Clear")]
     public async Task<IActionResult> ClearHistory(string timeframe)
     {
         var userId = _userManager.GetUserId(User);
@@ -36,5 +36,14 @@ public class UserController(UserRepository userRepository, UserManager<User> use
 
         await _userRepository.ClearHistory(int.Parse(userId), cutoffDate);
         return RedirectToAction("History");
+    }
+
+    [HttpGet("/Favorites")]
+    [Authorize]
+    public async Task<IActionResult> Favorites()
+    {
+        var userId = _userManager.GetUserId(User);
+        var favorites = await _userRepository.GetFavoritesAsync(int.Parse(userId));
+        return View(favorites);
     }
 }

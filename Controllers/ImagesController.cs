@@ -49,6 +49,8 @@ public class ImagesController(ImageService imageService, ImageRepository imageRe
 
         return View(model);
     }
+
+    [Authorize]
     [HttpGet("/Images/{id}/Favorite")]
     public async Task<IActionResult> Favorite(int id)
     {

@@ -84,6 +84,11 @@ public class UserRepository(UserManager<User> userManager, PicturesDbContext con
         return _context.Favorites.Any(x => x.UserId == userId && x.ImageId == imageId);
     }
 
+    public async Task<List<Image>> GetFavoritesAsync(int userId)
+    {
+        return await _context.Favorites.Include(x => x.Image).Where(x => x.UserId == userId).Select(x => x.Image).ToListAsync();
+    }
+
     public async Task UpdateAsync(User user)
     {
         _context.Users.Update(user);

@@ -16,11 +16,11 @@
                         <button id="favoriteButton" class="btn btn-outline-@(Model.IsFavorite ? "primary" : "secondary")" data-image-id="@Model.Image.Id"><i class="fas fa-thumbs-up"></i></button>
                         <span id="favoriteCount">@Model.Image.Favorites.Count</span>
                         <button class="btn btn-outline-secondary" id="shareButton"><i class="fas fa-share"></i></button>
-                        <button class="btn btn-outline-danger"><i class="fas fa-flag"></i></button>
+                        <a href="/Reports/Create/Image/@Model.Image.Id" class="btn btn-outline-danger"><i class="fas fa-flag"></i></a>
                     </div>
                     <div class="user-info mt-3">
                         <img src="@Model.Image.User.AvatarUrl" class="rounded-circle" width="30" height="30" alt="@Model.Image.User.Name">
-                        <span>@Model.Image.User.Name</span>
+                        <span>@Model.Image.User.Name <a href="/Reports/Create/User/@Model.Image.User.Id" class="btn btn-outline-danger"><i class="fas fa-flag"></i></a></span>
                         <span class="text-muted">@Model.Image.CreatedAt.ToString("MMMM dd, yyyy")</span>
                     </div>
                     <div class="comments mt-3">

@@ -44,7 +44,7 @@ public class ImagesController(ImageService imageService, ImageRepository imageRe
                 CreatedAt = DateTime.Now,
             };
             var id = await _imageRepository.AddAsync(image);
-            return RedirectToAction($"/View/Image/{id}");
+            return Redirect($"/View/Image/{id}");
         }
 
         return View(model);
@@ -72,6 +72,6 @@ public class ImagesController(ImageService imageService, ImageRepository imageRe
             CreatedAt = DateTime.Now
         };
         await _imageRepository.CreateCommentAsync(comment);
-        return Ok();
+        return Ok(new { Message = "Success" });
     }
 }

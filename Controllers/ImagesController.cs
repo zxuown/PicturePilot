@@ -57,5 +57,21 @@ public class ImagesController(ImageService imageService, ImageRepository imageRe
         var user = await _userManager.GetUserAsync(User);
         var result = _userRepository.SwitchFavorite(user.Id, id);
         return Ok(result);
-    } 
+    }
+
+    [Authorize]
+    [HttpPost("/Images/{id}/Comment")]
+    public async Task<IActionResult> Comment(int id, [FromBody] string text)
+    {
+        var user = await _userManager.GetUserAsync(User);
+        var comment = new Comment
+        {
+            ImageId = id,
+            UserId = user.Id,
+            Text = text,
+            CreatedAt = DateTime.Now
+        };
+        await _imageRepository.CreateCommentAsync(comment);
+        return Ok();
+    }
 }

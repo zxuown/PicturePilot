@@ -25,9 +25,17 @@ public class ReportsController(ReportRepository reportRepository, UserManager<Us
     [HttpPost("/Reports/Create/{targetId}")]
     public async Task<IActionResult> Create([FromForm] Report report, int targetId)
     {
-        report.TargetId = targetId;
+        if ((int)report.ReportType == 0)
+        {
+            User user = await _userManager.FindByIdAsync(targetId.ToString());
+            report.TargetId = user.Id;
+        }
+        else
+        {
+            report.TargetId = targetId;
+        }
         report.Sender = await _userManager.GetUserAsync(User);
         await _reportRepository.AddAsync(report);
-        return Redirect($"/Reports/Create/{report.TargetId}");
+        return Ok();
     }
 }

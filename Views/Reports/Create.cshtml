@@ -7,7 +7,7 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<form action="/Reports/Create/@Model.TargetId" method="post" class="form-horizontal">
+<form id="reportForm" action="/Reports/Create/@Model.TargetId" method="post" class="form-horizontal">
     <div class="form-group">
         <label asp-for="Message" class="control-label col-md-2">Message</label>
         <div class="col-md-10">
@@ -35,3 +35,39 @@
 </form>
 
 
+<script>
+    $(document).ready(function () {
+        $("#reportForm").submit(function (event) {
+            event.preventDefault();
+
+            var form = $(this);
+            $.ajax({
+                type: "POST",
+                url: form.attr("action"),
+                data: form.serialize(),
+                success: function (response) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Your report has been submitted.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '/Home';
+                        }
+                    });
+                },
+                error: function () {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'There was an error submitting your report.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        });
+    });
+</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.0/dist/sweetalert2.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.0/dist/sweetalert2.all.min.js"></script>

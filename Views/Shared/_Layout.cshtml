@@ -87,6 +87,12 @@
             <li class="nav-item">
                 <a class="nav-link" href="/Images/Add"><i class="fas fa-plus"></i> Create</a>
             </li>
+            @if(User.IsInRole("ADMIN"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link" href="/Admin"><i class="fas fa-users"></i> Admin</a>
+                </li>
+            }
         </ul>
     </div>
 

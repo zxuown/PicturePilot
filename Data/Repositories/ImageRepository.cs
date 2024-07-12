@@ -54,7 +54,7 @@ public class ImageRepository(PicturesDbContext context) : BaseRepository<Image>(
         var query = await GetAllUnblockedAsync();
         if(search.Query != null)
         {
-            userPreferredTags = (await GetRecommendedTagsAsync(search.UserId.Value)).ToList();
+            var userPreferredTags = (await GetRecommendedTagsAsync((int)search.UserId)).ToList();
             if (userPreferredTags.Any())
             {
                 query = query.OrderByDescending(x => x.Tags.Count(t => userPreferredTags.Contains(t.Title)));

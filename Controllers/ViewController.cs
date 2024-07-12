@@ -39,7 +39,7 @@ public class ViewController(UserRepository userRepository, ImageRepository image
         return View(new ImageModel
         {
             Image = image,
-            IsFavorite = user.Id != null ? _userRepository.IsFavorite(user.Id, image.Id) : false
+            IsFavorite = user != null ? _userRepository.IsFavorite(user.Id, image.Id) : false
         });
     }
 }

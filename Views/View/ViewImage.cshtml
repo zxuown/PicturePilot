@@ -28,7 +28,9 @@
                         </div>
                     </div>
                     <div class="user-info mt-3">
+                        <a href="/View/User/@Model.Image.UserId">
                         <img src="@Model.Image.User.AvatarUrl" class="rounded-circle" width="30" height="30" alt="@Model.Image.User.Name">
+                        </a>
                         <span>@Model.Image.User.Name <a href="/Reports/Create/User/@Model.Image.User.Id" class="btn btn-outline-danger"><i class="fas fa-flag"></i></a></span>
                         <span class="text-muted">@Model.Image.CreatedAt.ToString("MMMM dd, yyyy")</span>
                     </div>
@@ -37,8 +39,11 @@
                         @foreach (var comment in Model.Image.Comments)
                         {
                             <div class="row ml-2 mt-3">
+                                
                                 <div class="comment ml-3 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;">
+                                    <a href="/View/User/@comment.UserId">
                                     <img src="@comment.User.AvatarUrl" style="width:30px; height:30px;" class="rounded-circle" alt="@Model.Image.User.Name">
+                                                                        </a>
                                 </div>
                                 <div class="comment mb-2 ml-3">
                                     <strong>@comment.User.Name</strong>

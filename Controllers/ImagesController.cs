@@ -42,6 +42,7 @@ public class ImagesController(ImageService imageService, ImageRepository imageRe
                 IsBLocked = !isContentAppropriate,
                 UserId = (await _userManager.GetUserAsync(User)).Id,
                 CreatedAt = DateTime.Now,
+                Tags = new HashSet<Tag>()
             };
             foreach (var tag in analysis.Tags)
             {

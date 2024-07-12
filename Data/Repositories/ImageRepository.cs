@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PicturePilot.Business.Models;
 using PicturePilot.Data.Entities;
 
 namespace PicturePilot.Data.Repositories;
@@ -42,8 +43,22 @@ public class ImageRepository(PicturesDbContext context) : BaseRepository<Image>(
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Image>> SearchAsync(string query)
+    public async Task<IEnumerable<Image>> SearchAsync(SearchModel search)
     {
-        return await _entities.Where(x => x.Title.ToLower().Contains(query.ToLower().Trim())).ToListAsync();
+        var query = _entities.Include(x => x.User).Include(x => x.Tags).AsQueryable();
+        if(search.Query != null)
+        {
+            query = query.Where(x => x.Title.Contains(search.Query));
+        }
+        if(search.Tags != null && search.Tags.Count > 0)
+        { 
+            query = query.Where(x => x.Tags.Any(t => search.Tags.Contains(t.Title)));
+        }
+        return await query.ToListAsync();
+    }
+
+    public IEnumerable<string> GetTags()
+    {
+        return _context.Tags.Select(x => x.Title).ToList();
     }
 }

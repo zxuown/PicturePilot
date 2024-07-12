@@ -11,7 +11,13 @@
             <form method="get" action="/Home">
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" placeholder="Search images..." name="query">
-                    <div class="input-group-append">
+                    <select class="form-control select2-multi mt-3" name="tags" multiple="multiple">
+                        @foreach (var tag in ViewData["Tags"] as List<string>)
+                        {
+                            <option value="@tag">@tag</option>
+                        }
+                    </select>
+                    <div class="input-group-append mt-3">
                         <button class="btn btn-outline-secondary" type="submit">Search</button>
                     </div>
                 </div>
@@ -40,7 +46,17 @@
         </div>
     }
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    $(document).ready(function () {
+        $('.select2-multi').select2({
+            placeholder: "Select tags",
+            allowClear: true,
+            width: '100%'
+        });
+    });
+
     function copyLink(id) {
         navigator.clipboard.writeText(`https://localhost:7184/View/Image/${id}`).then(() => {
             Swal.fire({

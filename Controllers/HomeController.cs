@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PicturePilot.Business.Models;
 using PicturePilot.Data.Repositories;
 
 namespace PicturePilot.Controllers;
@@ -19,19 +20,11 @@ public class HomeController(ImageRepository imageRepository) : Controller
         }
     }
 
-
     [HttpGet("/Home/{query?}")]
-    public async Task<IActionResult> Home(string? query)
+    public async Task<IActionResult> Home(SearchModel? search)
     {
-        if (!string.IsNullOrEmpty(query))
-        {
-            var images = await _imageRepository.SearchAsync(query);
+            var images = await _imageRepository.SearchAsync(search);
+        ViewData["Tags"] = _imageRepository.GetTags().ToList();
             return View(images);
-        }
-        else
-        {
-            var images = await _imageRepository.GetAllAsync();
-            return View(images);
-        }
     }
 }

@@ -4,6 +4,7 @@ using PicturePilot.Data;
 using PicturePilot.Data.Entities;
 using PicturePilot.Data.Repositories;
 using PicturePilot.Business.Services;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<PicturesDbContext>(options =>
@@ -24,6 +25,16 @@ builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
     .AddEntityFrameworkStores<PicturesDbContext>()
     .AddDefaultTokenProviders();
 builder.Services.AddScoped<ImageService>();
+builder.Services.AddSingleton<ComputerVisionClient>(provider =>
+{
+    var config = provider.GetRequiredService<IConfiguration>();
+    var endpoint = config["Azure:ComputerVision:Endpoint"];
+    var key = config["Azure:ComputerVision:SubscriptionKey"];
+    return new ComputerVisionClient(new ApiKeyServiceClientCredentials(key))
+    {
+        Endpoint = endpoint
+    };
+});
 builder.Services.AddScoped<ReportRepository>();
 builder.Services.AddScoped<ImageRepository>();
 builder.Services.AddScoped<UserRepository>();

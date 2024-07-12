@@ -16,20 +16,24 @@
                     @if ((int)@item.ReportType == 0)
                     {
                         <div>Report type: User</div>
+                        <a href="/View/User/@item.TargetId" class="btn btn-warning">User datails</a>
                     }
                     else
                     {
                         <div>Report type: Image</div>
+                        <a href="/View/Image/@item.TargetId" class="btn btn-warning">Image datails</a>
                     }
-                    @item.Message
+                    <br />Title: @item.Message
                     <br />Sender:  @item.Sender.Email
                 </p>
-                <form method="post" action="/Admin/Reports/Innocent/@item.Id">
-                    <button type="submit" class="btn btn-primary">Innocent</button>
-                </form>
-                <form method="post" action="/Admin/Reports/Block/@item.Id">
-                    <button type="submit" class="btn btn-danger">Block</button>
-                </form>
+                    <div style="display: flex">
+                    <form method="post" action="/Admin/Reports/Innocent/@item.Id">
+                        <button type="submit" class="btn btn-primary">Innocent</button>
+                    </form>
+                    <form method="post" action="/Admin/Reports/Block/@item.Id">
+                        <button type="submit" class="btn btn-danger">Block</button>
+                    </form>
+                    </div>
             </div>
         </div>
     }

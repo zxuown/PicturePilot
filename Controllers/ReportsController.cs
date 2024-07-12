@@ -14,18 +14,19 @@ public class ReportsController(ReportRepository reportRepository, UserManager<Us
     private readonly UserManager<User> _userManager = userManager;
 
     [HttpGet("/Reports/Create/{targetId}")]
-    public async Task<IActionResult> Create(int id)
+    public async Task<IActionResult> Create(int targetId)
     {
         return View(new Report
         {
-            TargetId = id,
-            Sender = await _userManager.GetUserAsync(User)
+            TargetId = targetId,
         });
     }
 
-    [HttpPost("/Reports/Create")]
-    public async Task<IActionResult> Create([FromForm] Report report)
+    [HttpPost("/Reports/Create/{targetId}")]
+    public async Task<IActionResult> Create([FromForm] Report report, int targetId)
     {
+        report.TargetId = targetId;
+        report.Sender = await _userManager.GetUserAsync(User);
         await _reportRepository.AddAsync(report);
         return Redirect($"/Reports/Create/{report.TargetId}");
     }

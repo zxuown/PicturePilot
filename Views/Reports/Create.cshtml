@@ -7,11 +7,10 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<form action="/Reports/Create" method="post" class="form-horizontal">
+<form action="/Reports/Create/@Model.TargetId" method="post" class="form-horizontal">
     <div class="form-group">
         <label asp-for="Message" class="control-label col-md-2">Message</label>
         <div class="col-md-10">
-
             <textarea asp-for="Message" name="Message" class="form-control"></textarea>
             <span asp-validation-for="Message" class="text-danger"></span>
         </div>

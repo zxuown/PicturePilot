@@ -41,7 +41,7 @@ public class AdminController : Controller
         }
         else
         {
-            Image image = await _imageRepository.GetByIdAsync(id);
+            Image image = await _imageRepository.GetByIdAsync(report.TargetId);
             image.IsBLocked = true;
             await _imageRepository.UpdateAsync(image);
         }

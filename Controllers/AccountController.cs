@@ -156,8 +156,13 @@ public class AccountController(UserManager<User> userManager, SignInManager<User
         {
             return BadRequest(new { Message = "", Error = "Wrong Password!" });
         }
+       
         var username = existingLogin ?? existingEmail;
 
+        if (username.IsBLocked)
+        {
+            return BadRequest(new { Message = "", Error = "You have been banned!" });
+        }
         return Ok(new { Message = "Success!", admin = await _userManager.IsInRoleAsync(username, "ADMIN") });
     }
 

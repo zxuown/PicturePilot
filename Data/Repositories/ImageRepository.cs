@@ -27,6 +27,12 @@ public class ImageRepository(PicturesDbContext context) : BaseRepository<Image>(
         return allImages.Where(x => x.IsBLocked).ToList();
     }
 
+    public async Task<IQueryable<Image>> GetAllUnblockedAsync()
+    {
+        var allImages = await GetAllAsync();
+        return _entities.Include(x => x.User).Include(x => x.Tags).Where(x => !x.IsBLocked);
+    }
+
     public async Task<IEnumerable<Image>> GetAllByUserIdAsync(int userId)
     {
         return await _entities.Where(x => x.User.Id == userId).ToListAsync();
@@ -45,10 +51,8 @@ public class ImageRepository(PicturesDbContext context) : BaseRepository<Image>(
 
     public async Task<IEnumerable<Image>> SearchAsync(SearchModel search)
     {
-        var query = _entities.Include(x => x.User).Include(x => x.Tags).AsQueryable();
-
-        List<string> userPreferredTags = new List<string>();
-        if (search.UserId.HasValue)
+        var query = await GetAllUnblockedAsync();
+        if(search.Query != null)
         {
             userPreferredTags = (await GetRecommendedTagsAsync(search.UserId.Value)).ToList();
             if (userPreferredTags.Any())

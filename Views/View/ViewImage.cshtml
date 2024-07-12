@@ -93,7 +93,7 @@
                             'Content-Type': 'application/json',
                             'Accept': 'application/json'
                         },
-                        body: JSON.stringify(commentText)
+                        body: JSON.stringify({ text: commentText })
                     })
                         .then(response => {
                             if (!response.ok) {

@@ -43,6 +43,10 @@ public class ImagesController(ImageService imageService, ImageRepository imageRe
                 UserId = (await _userManager.GetUserAsync(User)).Id,
                 CreatedAt = DateTime.Now,
             };
+            foreach (var tag in analysis.Tags)
+            {
+                image.Tags.Add(new Tag { Title = tag.Name });
+            }
             var id = await _imageRepository.AddAsync(image);
             return Redirect($"/View/Image/{id}");
         }
@@ -61,17 +65,24 @@ public class ImagesController(ImageService imageService, ImageRepository imageRe
 
     [Authorize]
     [HttpPost("/Images/{id}/Comment")]
-    public async Task<IActionResult> Comment(int id, [FromBody] string text)
+    public async Task<IActionResult> Comment(int id, [FromBody] CommentModel model)
     {
         var user = await _userManager.GetUserAsync(User);
         var comment = new Comment
         {
             ImageId = id,
             UserId = user.Id,
-            Text = text,
+            Text =  model.Text,
             CreatedAt = DateTime.Now
         };
-        await _imageRepository.CreateCommentAsync(comment);
+        try
+        {
+            await _imageRepository.CreateCommentAsync(comment);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new { Error = e.Message });
+        }
         return Ok(new { Message = "Success" });
     }
 }

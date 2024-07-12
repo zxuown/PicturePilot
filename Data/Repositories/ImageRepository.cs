@@ -36,4 +36,9 @@ public class ImageRepository(PicturesDbContext context) : BaseRepository<Image>(
         await _context.Comments.AddAsync(comment);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<IEnumerable<Image>> SearchAsync(string query)
+    {
+        return await _entities.Where(x => x.Title.ToLower().Contains(query.ToLower().Trim())).ToListAsync();
+    }
 }

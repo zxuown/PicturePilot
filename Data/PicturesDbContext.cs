@@ -32,9 +32,6 @@ public class PicturesDbContext : IdentityDbContext<User, IdentityRole<int>, int>
         modelBuilder.Entity<UserImageHistory>()
     .HasKey(uh => new { uh.UserId, uh.ImageId });
 
-        modelBuilder.Entity<Comment>()
-      .HasKey(c => new { c.UserId, c.ImageId, c.CreatedAt });
-
 
         modelBuilder.Entity<UserImageHistory>()
             .HasOne(uh => uh.User)

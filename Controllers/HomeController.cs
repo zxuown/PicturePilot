@@ -20,10 +20,18 @@ public class HomeController(ImageRepository imageRepository) : Controller
     }
 
 
-    [HttpGet("/Home")]
-    public async Task<IActionResult> Home()
+    [HttpGet("/Home/{query?}")]
+    public async Task<IActionResult> Home(string? query)
     {
-        var images = await _imageRepository.GetAllAsync();
-        return View(images);
+        if (string.IsNullOrEmpty(query))
+        {
+            var images = await _imageRepository.SearchAsync(query);
+            return View(images);
+        }
+        else
+        {
+            var images = await _imageRepository.GetAllAsync();
+            return View(images);
+        }
     }
 }

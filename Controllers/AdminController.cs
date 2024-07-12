@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PicturePilot.Data;
 using PicturePilot.Data.Entities;
 using PicturePilot.Data.Repositories;
 
 namespace PicturePilot.Controllers;
 
+[Authorize(Roles = "ADMIN")]
 public class AdminController : Controller
 {
     private readonly ReportRepository _reportRepository;

@@ -28,7 +28,7 @@
 <div class="container mt-4">
     <div class="profile text-center">
         <img src="@Model.User.AvatarUrl" alt="Avatar" class="avatar img-thumbnail">
-        <h2>@Model.User.Name</h2>
+        <h2>@Model.User.Name <a href="/Reports/Create/User/@Model.User.Id" class="btn btn-outline-danger"><i class="fas fa-flag"></i></a></h2>
     </div>
     <div class="comments mt-4">
         <h3>Last 5 Comments</h3>

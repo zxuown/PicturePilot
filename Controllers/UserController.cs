@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using PicturePilot.Business.Models;
 using PicturePilot.Data.Entities;
 using PicturePilot.Data.Repositories;
 
@@ -45,5 +46,13 @@ public class UserController(UserRepository userRepository, UserManager<User> use
         var userId = _userManager.GetUserId(User);
         var favorites = await _userRepository.GetFavoritesAsync(int.Parse(userId));
         return View(favorites);
+    }
+
+    [HttpGet("/Profile")]
+    [Authorize]
+    public async Task<IActionResult> Profile()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        return Redirect($"/View/User/{user.Id}");
     }
 }

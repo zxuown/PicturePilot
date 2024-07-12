@@ -46,7 +46,18 @@ public class ImageRepository(PicturesDbContext context) : BaseRepository<Image>(
     public async Task<IEnumerable<Image>> SearchAsync(SearchModel search)
     {
         var query = _entities.Include(x => x.User).Include(x => x.Tags).AsQueryable();
-        if(search.Query != null)
+
+        List<string> userPreferredTags = new List<string>();
+        if (search.UserId.HasValue)
+        {
+            userPreferredTags = (await GetRecommendedTagsAsync(search.UserId.Value)).ToList();
+            if (userPreferredTags.Any())
+            {
+                query = query.OrderByDescending(x => x.Tags.Count(t => userPreferredTags.Contains(t.Title)));
+            }
+        }
+
+        if (search.Query != null)
         {
             query = query.Where(x => x.Title.Contains(search.Query));
         }
@@ -55,6 +66,31 @@ public class ImageRepository(PicturesDbContext context) : BaseRepository<Image>(
             query = query.Where(x => x.Tags.Any(t => search.Tags.Contains(t.Title)));
         }
         return await query.ToListAsync();
+    }
+
+    public async Task<IEnumerable<string>> GetRecommendedTagsAsync(int userId)
+    {
+        var userHistoryImages = await _context.History
+            .Where(h => h.UserId == userId)
+            .Select(h => h.Image)
+            .ToListAsync();
+
+        var userFavoriteImages = await _context.Favorites
+            .Where(f => f.UserId == userId)
+            .Select(f => f.Image)
+            .ToListAsync();
+
+        var combinedImages = userHistoryImages.Concat(userFavoriteImages).Distinct();
+        
+        var userTags = combinedImages
+            .SelectMany(img => img.Tags)
+            .GroupBy(tag => tag.Title)
+            .Select(group => new { Tag = group.Key, Count = group.Count() })
+            .OrderByDescending(tag => tag.Count)
+            .Select(tag => tag.Tag)
+            .ToList();
+
+        return userTags;
     }
 
     public IEnumerable<string> GetTags()

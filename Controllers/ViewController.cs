@@ -16,7 +16,15 @@ public class ViewController(UserRepository userRepository, ImageRepository image
     public async Task<IActionResult> ViewUser(int id)
     {
         var user = await _userRepository.GetByIdAsync(id);
-        return View(user);
+
+        var profile = new UserProfileViewModel
+        {
+            Images = user.Images,
+            LastComments = user.Comments.OrderByDescending(c => c.CreatedAt).Take(5),
+            User = user
+        };
+
+        return View(profile);
     }
 
     [HttpGet("/View/Image/{id}")]

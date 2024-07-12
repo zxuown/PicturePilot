@@ -8,7 +8,7 @@
     <h2 class="mb-4">History</h2>
 
     <div class="mb-3">
-        <form asp-action="ClearHistory" method="post" class="form-inline">
+        <form action="/History/Clear" method="post" class="form-inline">
             <div class="form-group">
                 <select name="timeframe" class="form-control">
                     <option value="1day">1 Day</option>
@@ -28,11 +28,13 @@
             <div class="card mb-3">
                 <div class="row no-gutters">
                     <div class="col-md-4">
+                        <a href="/View/Image/@item.ImageId">
                         <img src="@item.Image.Url" class="card-img" alt="Reviewed Image">
+                        </a>
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
-                            <h5 class="card-title">Reviewed Image</h5>
+                            <h5 class="card-title">@item.Image.Title</h5>
                             <p class="card-text">Reviewed on: @item.ViewedAt.ToString("g")</p>
                         </div>
                     </div>

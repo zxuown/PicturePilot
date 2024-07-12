@@ -21,12 +21,11 @@ public class UserRepository(UserManager<User> userManager, PicturesDbContext con
     }
     public async Task<User> GetByIdAsync(int id)
     {
-        return await _userManager.FindByIdAsync(id.ToString());
+        return await _context.Users.Include(x=> x.Comments).Include(x=> x.Favorites).Include(x=> x.History).Include(x=> x.Images).FirstOrDefaultAsync(x=> x.Id == id);
     }
 
     public void AddToHistory(int userId, int imageId)
     {
-
         var history = _context.History.FirstOrDefault(x => x.UserId == userId && x.ImageId == imageId);
         if (history != null)
         {

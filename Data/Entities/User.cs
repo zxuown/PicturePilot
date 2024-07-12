@@ -20,5 +20,7 @@ public class User : IdentityUser<int>
 
     public virtual ICollection<Favorite> Favorites { get; set; }
 
+    public virtual ICollection<Comment> Comments { get; set; }
+
     public virtual HashSet<UserImageHistory> History { get; set; }
 }

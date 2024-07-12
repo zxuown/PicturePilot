@@ -7,11 +7,13 @@ using PicturePilot.Data.Repositories;
 namespace PicturePilot.Controllers;
 
 [Authorize]
-public class ReportsController(ReportRepository reportRepository, UserManager<User> userManager) : Controller
+public class ReportsController(ReportRepository reportRepository, UserManager<User> userManager, ImageRepository imageRepository) : Controller
 {
     private readonly ReportRepository _reportRepository = reportRepository;
 
     private readonly UserManager<User> _userManager = userManager;
+
+    private readonly ImageRepository _imageRepository = imageRepository;
 
     [HttpGet("/Reports/Create/{targetId}")]
     public async Task<IActionResult> Create(int targetId)
@@ -25,9 +27,10 @@ public class ReportsController(ReportRepository reportRepository, UserManager<Us
     [HttpPost("/Reports/Create/{targetId}")]
     public async Task<IActionResult> Create([FromForm] Report report, int targetId)
     {
+        Image image = await _imageRepository.GetByIdAsync(targetId);
         if ((int)report.ReportType == 0)
         {
-            User user = await _userManager.FindByIdAsync(targetId.ToString());
+            User user = await _userManager.FindByIdAsync(image.UserId.ToString());
             report.TargetId = user.Id;
         }
         else
